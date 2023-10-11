@@ -118,6 +118,22 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
                             if (user == null) {
                               return;
                             }
+                            await showDialog(
+                              context: context,
+                              builder: (alertDialogContext) {
+                                return AlertDialog(
+                                  title: Text(currentUserReference!.id),
+                                  content: Text(currentUserEmail),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(alertDialogContext),
+                                      child: Text('Ok'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
 
                             context.goNamedAuth('rooms', context.mounted);
                           },

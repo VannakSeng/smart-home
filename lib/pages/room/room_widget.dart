@@ -59,10 +59,7 @@ class _RoomWidgetState extends State<RoomWidget> {
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            await DevicesRecord.createDoc(widget.room!.reference)
-                .set(createDevicesRecordData(
-              name: '',
-            ));
+            context.pushNamed('device');
           },
           backgroundColor: FlutterFlowTheme.of(context).primary,
           elevation: 8.0,

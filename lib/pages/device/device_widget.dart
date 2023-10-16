@@ -16,7 +16,7 @@ export 'device_model.dart';
 class DeviceWidget extends StatefulWidget {
   const DeviceWidget({
     Key? key,
-    required this.room,
+    this.room,
   }) : super(key: key);
 
   final DevicesRecord? room;
@@ -70,11 +70,24 @@ class _DeviceWidgetState extends State<DeviceWidget> {
             hoverColor: Colors.transparent,
             highlightColor: Colors.transparent,
             onTap: () async {
-              await widget.room!.reference.update(createDevicesRecordData(
-                name: _model.textFieldDeviceNameController.text,
-                status: _model.statusValue,
-                active: _model.activeValue,
-              ));
+              if (widget.room != null) {
+                await widget.room!.reference.update(createDevicesRecordData(
+                  name: _model.textFieldDeviceNameController.text,
+                  status: _model.statusValue,
+                  active: _model.activeValue,
+                  photo: _model.uploadedFileUrl,
+                ));
+              } else {
+                await DevicesRecord.createDoc(widget.room!.parentReference)
+                    .set(createDevicesRecordData(
+                  name: _model.textFieldDeviceNameController.text,
+                  status: _model.statusValue,
+                  active: _model.activeValue,
+                  photo: _model.uploadedFileUrl,
+                ));
+              }
+
+              context.safePop();
             },
             child: Icon(
               Icons.save,

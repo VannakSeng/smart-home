@@ -72,7 +72,20 @@ class _RoomItemWidgetWidgetState extends State<RoomItemWidgetWidget> {
                   focusColor: Colors.transparent,
                   hoverColor: Colors.transparent,
                   highlightColor: Colors.transparent,
-                  onTap: () async {},
+                  onTap: () async {
+                    context.pushNamed(
+                      'room',
+                      queryParameters: {
+                        'room': serializeParam(
+                          widget.data,
+                          ParamType.Document,
+                        ),
+                      }.withoutNulls,
+                      extra: <String, dynamic>{
+                        'room': widget.data,
+                      },
+                    );
+                  },
                   child: Text(
                     'more',
                     style: FlutterFlowTheme.of(context).bodyLarge.override(

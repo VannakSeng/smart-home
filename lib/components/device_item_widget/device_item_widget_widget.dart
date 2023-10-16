@@ -52,7 +52,7 @@ class _DeviceItemWidgetWidgetState extends State<DeviceItemWidgetWidget> {
     return Card(
       clipBehavior: Clip.antiAliasWithSaveLayer,
       color: widget.device!.status
-          ? FlutterFlowTheme.of(context).primary
+          ? FlutterFlowTheme.of(context).tertiary
           : Color(0x00000000),
       elevation: 4.0,
       shape: RoundedRectangleBorder(

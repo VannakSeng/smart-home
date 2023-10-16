@@ -97,7 +97,7 @@ class _RoomWidgetState extends State<RoomWidget> {
                     height: 100.0,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
-                        colors: [Color(0x43000000), Colors.transparent],
+                        colors: [Color(0x70000000), Color(0x21000000)],
                         stops: [0.0, 1.0],
                         begin: AlignmentDirectional(0.0, -1.0),
                         end: AlignmentDirectional(0, 1.0),
@@ -297,7 +297,7 @@ class _RoomWidgetState extends State<RoomWidget> {
             ),
             Expanded(
               child: Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(12.0, 12.0, 12.0, 12.0),
+                padding: EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 12.0, 0.0),
                 child: StreamBuilder<List<DevicesRecord>>(
                   stream: queryDevicesRecord(
                     parent: widget.room?.reference,
@@ -320,11 +320,16 @@ class _RoomWidgetState extends State<RoomWidget> {
                     List<DevicesRecord> listViewDevicesRecordList =
                         snapshot.data!;
                     return ListView.separated(
-                      padding: EdgeInsets.zero,
+                      padding: EdgeInsets.fromLTRB(
+                        0,
+                        12.0,
+                        0,
+                        0,
+                      ),
                       shrinkWrap: true,
                       scrollDirection: Axis.vertical,
                       itemCount: listViewDevicesRecordList.length,
-                      separatorBuilder: (_, __) => SizedBox(height: 12.0),
+                      separatorBuilder: (_, __) => SizedBox(height: 8.0),
                       itemBuilder: (context, listViewIndex) {
                         final listViewDevicesRecord =
                             listViewDevicesRecordList[listViewIndex];

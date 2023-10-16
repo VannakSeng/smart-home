@@ -117,6 +117,16 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: 'profile',
           path: '/profile',
           builder: (context, params) => ProfileWidget(),
+        ),
+        FFRoute(
+          name: 'device',
+          path: '/device',
+          asyncParams: {
+            'room': getDoc(['rooms', 'devices'], DevicesRecord.fromSnapshot),
+          },
+          builder: (context, params) => DeviceWidget(
+            room: params.getParam('room', ParamType.Document),
+          ),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

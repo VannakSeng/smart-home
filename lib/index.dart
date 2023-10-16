@@ -6,3 +6,4 @@ export '/pages/details14_destination/details14_destination_widget.dart'
 export '/pages/authentication/authentication_widget.dart'
     show AuthenticationWidget;
 export '/pages/profile/profile_widget.dart' show ProfileWidget;
+export '/pages/device/device_widget.dart' show DeviceWidget;

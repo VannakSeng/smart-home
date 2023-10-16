@@ -1,42 +1,44 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/backend/firebase_storage/storage.dart';
-import '/components/device_item_widget/device_item_widget_widget.dart';
-import '/components/form_form_widget/form_form_widget_widget.dart';
+import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/form_field_controller.dart';
 import '/flutter_flow/upload_data.dart';
-import 'package:aligned_dialog/aligned_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'room_model.dart';
-export 'room_model.dart';
+import 'device_model.dart';
+export 'device_model.dart';
 
-class RoomWidget extends StatefulWidget {
-  const RoomWidget({
+class DeviceWidget extends StatefulWidget {
+  const DeviceWidget({
     Key? key,
     required this.room,
   }) : super(key: key);
 
-  final RoomsRecord? room;
+  final DevicesRecord? room;
 
   @override
-  _RoomWidgetState createState() => _RoomWidgetState();
+  _DeviceWidgetState createState() => _DeviceWidgetState();
 }
 
-class _RoomWidgetState extends State<RoomWidget> {
-  late RoomModel _model;
+class _DeviceWidgetState extends State<DeviceWidget> {
+  late DeviceModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => RoomModel());
+    _model = createModel(context, () => DeviceModel());
+
+    _model.textFieldDeviceNameController ??=
+        TextEditingController(text: widget.room?.name);
   }
 
   @override
@@ -59,15 +61,13 @@ class _RoomWidgetState extends State<RoomWidget> {
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            await DevicesRecord.createDoc(widget.room!.reference)
-                .set(createDevicesRecordData(
-              name: '',
-            ));
+            await widget.room!.reference.update(createDevicesRecordData());
+            context.safePop();
           },
           backgroundColor: FlutterFlowTheme.of(context).primary,
           elevation: 8.0,
           child: Icon(
-            Icons.add,
+            Icons.save,
             color: FlutterFlowTheme.of(context).secondaryText,
             size: 24.0,
           ),
@@ -111,51 +111,18 @@ class _RoomWidgetState extends State<RoomWidget> {
                             context.safePop();
                           },
                         ),
-                        Builder(
-                          builder: (context) => InkWell(
-                            splashColor: Colors.transparent,
-                            focusColor: Colors.transparent,
-                            hoverColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            onTap: () async {
-                              await showAlignedDialog(
-                                context: context,
-                                isGlobal: true,
-                                avoidOverflow: false,
-                                targetAnchor: AlignmentDirectional(0.0, 0.0)
-                                    .resolve(Directionality.of(context)),
-                                followerAnchor: AlignmentDirectional(0.0, 0.0)
-                                    .resolve(Directionality.of(context)),
-                                builder: (dialogContext) {
-                                  return Material(
-                                    color: Colors.transparent,
-                                    child: GestureDetector(
-                                      onTap: () => _model
-                                              .unfocusNode.canRequestFocus
-                                          ? FocusScope.of(context)
-                                              .requestFocus(_model.unfocusNode)
-                                          : FocusScope.of(context).unfocus(),
-                                      child: Container(
-                                        width:
-                                            MediaQuery.sizeOf(context).width *
-                                                0.9,
-                                        child: FormFormWidgetWidget(
-                                          room: widget.room!,
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ).then((value) => setState(() {}));
-                            },
-                            child: Text(
-                              valueOrDefault<String>(
-                                widget.room?.name,
-                                '-',
-                              ),
-                              style: FlutterFlowTheme.of(context).headlineLarge,
-                            ),
-                          ),
+                        Switch.adaptive(
+                          value: _model.switchValue ??= widget.room!.status,
+                          onChanged: (newValue) async {
+                            setState(() => _model.switchValue = newValue!);
+                          },
+                          activeColor: FlutterFlowTheme.of(context).primary,
+                          activeTrackColor:
+                              FlutterFlowTheme.of(context).accent1,
+                          inactiveTrackColor:
+                              FlutterFlowTheme.of(context).alternate,
+                          inactiveThumbColor:
+                              FlutterFlowTheme.of(context).secondaryText,
                         ),
                       ],
                     ),
@@ -227,7 +194,7 @@ class _RoomWidgetState extends State<RoomWidget> {
                             }
 
                             await widget.room!.reference
-                                .update(createRoomsRecordData(
+                                .update(createDevicesRecordData(
                               photo: _model.uploadedFileUrl,
                             ));
                           },
@@ -238,48 +205,105 @@ class _RoomWidgetState extends State<RoomWidget> {
                 ],
               ),
             ),
-            Expanded(
-              child: Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(12.0, 12.0, 12.0, 12.0),
-                child: StreamBuilder<List<DevicesRecord>>(
-                  stream: queryDevicesRecord(
-                    parent: widget.room?.reference,
-                  ),
-                  builder: (context, snapshot) {
-                    // Customize what your widget looks like when it's loading.
-                    if (!snapshot.hasData) {
-                      return Center(
-                        child: SizedBox(
-                          width: 50.0,
-                          height: 50.0,
-                          child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              FlutterFlowTheme.of(context).primary,
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(12.0, 12.0, 12.0, 12.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Card(
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    color: FlutterFlowTheme.of(context).secondaryBackground,
+                    elevation: 4.0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 8.0, 0.0),
+                      child: TextFormField(
+                        controller: _model.textFieldDeviceNameController,
+                        autofocus: true,
+                        obscureText: false,
+                        decoration: InputDecoration(
+                          labelText: 'Device Name',
+                          labelStyle: FlutterFlowTheme.of(context).labelMedium,
+                          hintText: 'Device Name',
+                          hintStyle: FlutterFlowTheme.of(context).labelMedium,
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).alternate,
+                              width: 2.0,
                             ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).primary,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          errorBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).error,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          focusedErrorBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).error,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
                           ),
                         ),
-                      );
-                    }
-                    List<DevicesRecord> listViewDevicesRecordList =
-                        snapshot.data!;
-                    return ListView.separated(
-                      padding: EdgeInsets.zero,
-                      shrinkWrap: true,
-                      scrollDirection: Axis.vertical,
-                      itemCount: listViewDevicesRecordList.length,
-                      separatorBuilder: (_, __) => SizedBox(height: 12.0),
-                      itemBuilder: (context, listViewIndex) {
-                        final listViewDevicesRecord =
-                            listViewDevicesRecordList[listViewIndex];
-                        return DeviceItemWidgetWidget(
-                          key: Key(
-                              'Keyuob_${listViewIndex}_of_${listViewDevicesRecordList.length}'),
-                          device: listViewDevicesRecord,
-                        );
-                      },
-                    );
-                  },
-                ),
+                        style: FlutterFlowTheme.of(context).bodyMedium,
+                        validator: _model.textFieldDeviceNameControllerValidator
+                            .asValidator(context),
+                      ),
+                    ),
+                  ),
+                  Card(
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    color: FlutterFlowTheme.of(context).secondaryBackground,
+                    elevation: 4.0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: FlutterFlowDropDown<String>(
+                      controller: _model.dropDownValueController ??=
+                          FormFieldController<String>(
+                        _model.dropDownValue ??=
+                            widget.room?.active?.toString(),
+                      ),
+                      options: ['Activce', 'In Active'],
+                      onChanged: (val) =>
+                          setState(() => _model.dropDownValue = val),
+                      width: 300.0,
+                      height: 50.0,
+                      textStyle: FlutterFlowTheme.of(context).bodyMedium,
+                      hintText: 'Please Select Status',
+                      icon: Icon(
+                        Icons.keyboard_arrow_down_rounded,
+                        color: FlutterFlowTheme.of(context).secondaryText,
+                        size: 24.0,
+                      ),
+                      fillColor:
+                          FlutterFlowTheme.of(context).secondaryBackground,
+                      elevation: 2.0,
+                      borderColor: FlutterFlowTheme.of(context).alternate,
+                      borderWidth: 2.0,
+                      borderRadius: 8.0,
+                      margin:
+                          EdgeInsetsDirectional.fromSTEB(16.0, 4.0, 16.0, 4.0),
+                      hidesUnderline: true,
+                      isSearchable: false,
+                      isMultiSelect: false,
+                    ),
+                  ),
+                ].divide(SizedBox(height: 12.0)),
               ),
             ),
           ],

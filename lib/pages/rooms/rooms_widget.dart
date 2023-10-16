@@ -81,6 +81,11 @@ class _RoomsWidgetState extends State<RoomsWidget> {
             },
             backgroundColor: FlutterFlowTheme.of(context).primary,
             elevation: 8.0,
+            child: Icon(
+              Icons.add,
+              color: FlutterFlowTheme.of(context).secondaryText,
+              size: 24.0,
+            ),
           ),
           body: Stack(
             children: [

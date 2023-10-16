@@ -1,12 +1,10 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/backend/firebase_storage/storage.dart';
-import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import '/flutter_flow/form_field_controller.dart';
 import '/flutter_flow/upload_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -66,10 +64,23 @@ class _DeviceWidgetState extends State<DeviceWidget> {
           },
           backgroundColor: FlutterFlowTheme.of(context).primary,
           elevation: 8.0,
-          child: Icon(
-            Icons.save,
-            color: FlutterFlowTheme.of(context).secondaryText,
-            size: 24.0,
+          child: InkWell(
+            splashColor: Colors.transparent,
+            focusColor: Colors.transparent,
+            hoverColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            onTap: () async {
+              await widget.room!.reference.update(createDevicesRecordData(
+                name: _model.textFieldDeviceNameController.text,
+                status: _model.statusValue,
+                active: _model.activeValue,
+              ));
+            },
+            child: Icon(
+              Icons.save,
+              color: FlutterFlowTheme.of(context).secondaryText,
+              size: 24.0,
+            ),
           ),
         ),
         body: Column(
@@ -111,18 +122,46 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                             context.safePop();
                           },
                         ),
-                        Switch.adaptive(
-                          value: _model.switchValue ??= widget.room!.status,
-                          onChanged: (newValue) async {
-                            setState(() => _model.switchValue = newValue!);
+                        FlutterFlowIconButton(
+                          borderColor: FlutterFlowTheme.of(context).primary,
+                          borderRadius: 20.0,
+                          borderWidth: 1.0,
+                          buttonSize: 40.0,
+                          fillColor: FlutterFlowTheme.of(context).error,
+                          icon: Icon(
+                            Icons.delete_forever,
+                            color: FlutterFlowTheme.of(context)
+                                .secondaryBackground,
+                            size: 24.0,
+                          ),
+                          onPressed: () async {
+                            var confirmDialogResponse = await showDialog<bool>(
+                                  context: context,
+                                  builder: (alertDialogContext) {
+                                    return AlertDialog(
+                                      title: Text('Confirm'),
+                                      content: Text('Are you sure to delete?'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () => Navigator.pop(
+                                              alertDialogContext, false),
+                                          child: Text('Cancel'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () => Navigator.pop(
+                                              alertDialogContext, true),
+                                          child: Text('Confirm'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ) ??
+                                false;
+                            if (confirmDialogResponse) {
+                              await widget.room!.reference.delete();
+                              context.safePop();
+                            }
                           },
-                          activeColor: FlutterFlowTheme.of(context).primary,
-                          activeTrackColor:
-                              FlutterFlowTheme.of(context).accent1,
-                          inactiveTrackColor:
-                              FlutterFlowTheme.of(context).alternate,
-                          inactiveThumbColor:
-                              FlutterFlowTheme.of(context).secondaryText,
                         ),
                       ],
                     ),
@@ -272,35 +311,67 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
-                    child: FlutterFlowDropDown<String>(
-                      controller: _model.dropDownValueController ??=
-                          FormFieldController<String>(
-                        _model.dropDownValue ??=
-                            widget.room?.active?.toString(),
+                    child: Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(12.0, 4.0, 12.0, 4.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Acive',
+                            style: FlutterFlowTheme.of(context).bodyMedium,
+                          ),
+                          Switch.adaptive(
+                            value: _model.activeValue ??= widget.room!.active,
+                            onChanged: (newValue) async {
+                              setState(() => _model.activeValue = newValue!);
+                            },
+                            activeColor: FlutterFlowTheme.of(context).primary,
+                            activeTrackColor:
+                                FlutterFlowTheme.of(context).accent1,
+                            inactiveTrackColor:
+                                FlutterFlowTheme.of(context).alternate,
+                            inactiveThumbColor:
+                                FlutterFlowTheme.of(context).secondaryText,
+                          ),
+                        ],
                       ),
-                      options: ['Activce', 'In Active'],
-                      onChanged: (val) =>
-                          setState(() => _model.dropDownValue = val),
-                      width: 300.0,
-                      height: 50.0,
-                      textStyle: FlutterFlowTheme.of(context).bodyMedium,
-                      hintText: 'Please Select Status',
-                      icon: Icon(
-                        Icons.keyboard_arrow_down_rounded,
-                        color: FlutterFlowTheme.of(context).secondaryText,
-                        size: 24.0,
+                    ),
+                  ),
+                  Card(
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    color: FlutterFlowTheme.of(context).secondaryBackground,
+                    elevation: 4.0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(8.0, 4.0, 8.0, 4.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Status (Open/Close)',
+                            style: FlutterFlowTheme.of(context).bodyMedium,
+                          ),
+                          Switch.adaptive(
+                            value: _model.statusValue ??= widget.room!.status,
+                            onChanged: (newValue) async {
+                              setState(() => _model.statusValue = newValue!);
+                            },
+                            activeColor: FlutterFlowTheme.of(context).primary,
+                            activeTrackColor:
+                                FlutterFlowTheme.of(context).accent1,
+                            inactiveTrackColor:
+                                FlutterFlowTheme.of(context).alternate,
+                            inactiveThumbColor:
+                                FlutterFlowTheme.of(context).secondaryText,
+                          ),
+                        ],
                       ),
-                      fillColor:
-                          FlutterFlowTheme.of(context).secondaryBackground,
-                      elevation: 2.0,
-                      borderColor: FlutterFlowTheme.of(context).alternate,
-                      borderWidth: 2.0,
-                      borderRadius: 8.0,
-                      margin:
-                          EdgeInsetsDirectional.fromSTEB(16.0, 4.0, 16.0, 4.0),
-                      hidesUnderline: true,
-                      isSearchable: false,
-                      isMultiSelect: false,
                     ),
                   ),
                 ].divide(SizedBox(height: 12.0)),

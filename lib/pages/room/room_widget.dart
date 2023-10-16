@@ -111,6 +111,57 @@ class _RoomWidgetState extends State<RoomWidget> {
                             context.safePop();
                           },
                         ),
+                        FlutterFlowIconButton(
+                          borderColor: FlutterFlowTheme.of(context).primary,
+                          borderRadius: 20.0,
+                          borderWidth: 1.0,
+                          buttonSize: 40.0,
+                          fillColor: FlutterFlowTheme.of(context).error,
+                          icon: Icon(
+                            Icons.delete_forever,
+                            color: FlutterFlowTheme.of(context)
+                                .secondaryBackground,
+                            size: 24.0,
+                          ),
+                          onPressed: () async {
+                            var confirmDialogResponse = await showDialog<bool>(
+                                  context: context,
+                                  builder: (alertDialogContext) {
+                                    return AlertDialog(
+                                      title: Text('Confirm'),
+                                      content: Text('Are you sure to delete?'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () => Navigator.pop(
+                                              alertDialogContext, false),
+                                          child: Text('Cancel'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () => Navigator.pop(
+                                              alertDialogContext, true),
+                                          child: Text('Confirm'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ) ??
+                                false;
+                            if (confirmDialogResponse) {
+                              await widget.room!.reference.delete();
+                              context.safePop();
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 16.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
                         Builder(
                           builder: (context) => InkWell(
                             splashColor: Colors.transparent,
@@ -157,23 +208,15 @@ class _RoomWidgetState extends State<RoomWidget> {
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 16.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
                         FlutterFlowIconButton(
                           borderRadius: 20.0,
                           borderWidth: 1.0,
                           buttonSize: 40.0,
+                          fillColor: FlutterFlowTheme.of(context).secondary,
                           icon: Icon(
                             Icons.photo_camera,
-                            color: FlutterFlowTheme.of(context).primaryText,
+                            color: FlutterFlowTheme.of(context)
+                                .secondaryBackground,
                             size: 24.0,
                           ),
                           onPressed: () async {

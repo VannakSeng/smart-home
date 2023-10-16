@@ -35,20 +35,7 @@ class _DeviceItemWidgetWidgetState extends State<DeviceItemWidgetWidget> {
     _model = createModel(context, () => DeviceItemWidgetModel());
 
     // On component load action.
-    SchedulerBinding.instance.addPostFrameCallback((_) async {
-      context.pushNamed(
-        'device',
-        queryParameters: {
-          'room': serializeParam(
-            widget.device,
-            ParamType.Document,
-          ),
-        }.withoutNulls,
-        extra: <String, dynamic>{
-          'room': widget.device,
-        },
-      );
-    });
+    SchedulerBinding.instance.addPostFrameCallback((_) async {});
   }
 
   @override

@@ -8,6 +8,7 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/upload_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'device_model.dart';
@@ -37,6 +38,7 @@ class _DeviceWidgetState extends State<DeviceWidget> {
 
     _model.textFieldDeviceNameController ??=
         TextEditingController(text: widget.room?.name);
+    _model.textFieldDeviceNameFocusNode ??= FocusNode();
   }
 
   @override
@@ -48,6 +50,15 @@ class _DeviceWidgetState extends State<DeviceWidget> {
 
   @override
   Widget build(BuildContext context) {
+    if (isiOS) {
+      SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(
+          statusBarBrightness: Theme.of(context).brightness,
+          systemStatusBarContrastEnforced: true,
+        ),
+      );
+    }
+
     context.watch<FFAppState>();
 
     return GestureDetector(
@@ -275,12 +286,17 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                           EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 8.0, 0.0),
                       child: TextFormField(
                         controller: _model.textFieldDeviceNameController,
+                        focusNode: _model.textFieldDeviceNameFocusNode,
                         autofocus: true,
                         obscureText: false,
                         decoration: InputDecoration(
-                          labelText: 'Device Name',
+                          labelText: FFLocalizations.of(context).getText(
+                            'h0fcygrl' /* Device Name */,
+                          ),
                           labelStyle: FlutterFlowTheme.of(context).labelMedium,
-                          hintText: 'Device Name',
+                          hintText: FFLocalizations.of(context).getText(
+                            '7ny5hukl' /* Device Name */,
+                          ),
                           hintStyle: FlutterFlowTheme.of(context).labelMedium,
                           enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
@@ -332,7 +348,9 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Acive',
+                            FFLocalizations.of(context).getText(
+                              'gzfg6e6c' /* Acive */,
+                            ),
                             style: FlutterFlowTheme.of(context).bodyMedium,
                           ),
                           Switch.adaptive(
@@ -367,7 +385,9 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Status (Open/Close)',
+                            FFLocalizations.of(context).getText(
+                              'bxvfkxoe' /* Status (Open/Close) */,
+                            ),
                             style: FlutterFlowTheme.of(context).bodyMedium,
                           ),
                           Switch.adaptive(

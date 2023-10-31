@@ -6,6 +6,7 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -185,6 +186,15 @@ class _Details14DestinationWidgetState extends State<Details14DestinationWidget>
 
   @override
   Widget build(BuildContext context) {
+    if (isiOS) {
+      SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(
+          statusBarBrightness: Theme.of(context).brightness,
+          systemStatusBarContrastEnforced: true,
+        ),
+      );
+    }
+
     context.watch<FFAppState>();
 
     return GestureDetector(
@@ -296,7 +306,9 @@ class _Details14DestinationWidgetState extends State<Details14DestinationWidget>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Firenze - Giardino Bardini',
+                        FFLocalizations.of(context).getText(
+                          '8cv43mt5' /* Firenze - Giardino Bardini */,
+                        ),
                         style:
                             FlutterFlowTheme.of(context).displaySmall.override(
                                   fontFamily: 'Outfit',
@@ -318,7 +330,9 @@ class _Details14DestinationWidgetState extends State<Details14DestinationWidget>
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '4 Night Stay',
+                                  FFLocalizations.of(context).getText(
+                                    'mu7d4f50' /* 4 Night Stay */,
+                                  ),
                                   style: FlutterFlowTheme.of(context)
                                       .headlineSmall
                                       .override(
@@ -349,7 +363,9 @@ class _Details14DestinationWidgetState extends State<Details14DestinationWidget>
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             8.0, 0.0, 0.0, 0.0),
                                         child: Text(
-                                          '4.7',
+                                          FFLocalizations.of(context).getText(
+                                            'ypun6wmu' /* 4.7 */,
+                                          ),
                                           style: FlutterFlowTheme.of(context)
                                               .bodySmall
                                               .override(
@@ -376,7 +392,9 @@ class _Details14DestinationWidgetState extends State<Details14DestinationWidget>
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     8.0, 0.0, 8.0, 0.0),
                                 child: Text(
-                                  '\$220 USD',
+                                  FFLocalizations.of(context).getText(
+                                    '14m85xes' /* $220 USD */,
+                                  ),
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
@@ -396,7 +414,9 @@ class _Details14DestinationWidgetState extends State<Details14DestinationWidget>
                         padding:
                             EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 4.0),
                         child: Text(
-                          'Description',
+                          FFLocalizations.of(context).getText(
+                            'yvdt9g0c' /* Description */,
+                          ),
                           style:
                               FlutterFlowTheme.of(context).bodySmall.override(
                                     fontFamily: 'Plus Jakarta Sans',
@@ -411,7 +431,9 @@ class _Details14DestinationWidgetState extends State<Details14DestinationWidget>
                         padding:
                             EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 24.0),
                         child: Text(
-                          'Non so se la bellezza salverà il mondo ma sicuramente aiuta. Sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+                          FFLocalizations.of(context).getText(
+                            'fq2wacer' /* Non so se la bellezza salverà ... */,
+                          ),
                           style:
                               FlutterFlowTheme.of(context).titleSmall.override(
                                     fontFamily: 'Readex Pro',

@@ -6,6 +6,7 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -70,6 +71,15 @@ class _ProfileWidgetState extends State<ProfileWidget>
 
   @override
   Widget build(BuildContext context) {
+    if (isiOS) {
+      SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(
+          statusBarBrightness: Theme.of(context).brightness,
+          systemStatusBarContrastEnforced: true,
+        ),
+      );
+    }
+
     context.watch<FFAppState>();
 
     return GestureDetector(
@@ -141,7 +151,9 @@ class _ProfileWidgetState extends State<ProfileWidget>
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 0.0, 0.0),
               child: Text(
-                'Andrew D.',
+                FFLocalizations.of(context).getText(
+                  'y0gs8cvu' /* Andrew D. */,
+                ),
                 style: FlutterFlowTheme.of(context).headlineLarge.override(
                       fontFamily: 'Urbanist',
                       color: Color(0xFF101213),
@@ -153,7 +165,9 @@ class _ProfileWidgetState extends State<ProfileWidget>
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(24.0, 4.0, 0.0, 16.0),
               child: Text(
-                'andrew@domainname.com',
+                FFLocalizations.of(context).getText(
+                  'pbqnjmog' /* andrew@domainname.com */,
+                ),
                 style: FlutterFlowTheme.of(context).labelMedium.override(
                       fontFamily: 'Plus Jakarta Sans',
                       color: Color(0xFF57636C),
@@ -165,7 +179,9 @@ class _ProfileWidgetState extends State<ProfileWidget>
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(24.0, 4.0, 0.0, 0.0),
               child: Text(
-                'Your Account',
+                FFLocalizations.of(context).getText(
+                  'gkxkwelh' /* Your Account */,
+                ),
                 style: FlutterFlowTheme.of(context).labelMedium.override(
                       fontFamily: 'Plus Jakarta Sans',
                       color: Color(0xFF57636C),
@@ -206,7 +222,9 @@ class _ProfileWidgetState extends State<ProfileWidget>
                         padding:
                             EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 0.0, 0.0),
                         child: Text(
-                          'Edit Profile',
+                          FFLocalizations.of(context).getText(
+                            '72cprfin' /* Edit Profile */,
+                          ),
                           style:
                               FlutterFlowTheme.of(context).labelLarge.override(
                                     fontFamily: 'Plus Jakarta Sans',
@@ -263,7 +281,9 @@ class _ProfileWidgetState extends State<ProfileWidget>
                         padding:
                             EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 0.0, 0.0),
                         child: Text(
-                          'Notification Settings',
+                          FFLocalizations.of(context).getText(
+                            '0yzjt0t0' /* Notification Settings */,
+                          ),
                           style:
                               FlutterFlowTheme.of(context).labelLarge.override(
                                     fontFamily: 'Plus Jakarta Sans',
@@ -291,7 +311,9 @@ class _ProfileWidgetState extends State<ProfileWidget>
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(24.0, 16.0, 0.0, 0.0),
               child: Text(
-                'App Settings',
+                FFLocalizations.of(context).getText(
+                  'rv1791m2' /* App Settings */,
+                ),
                 style: FlutterFlowTheme.of(context).labelMedium.override(
                       fontFamily: 'Plus Jakarta Sans',
                       color: Color(0xFF57636C),
@@ -332,7 +354,9 @@ class _ProfileWidgetState extends State<ProfileWidget>
                         padding:
                             EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 0.0, 0.0),
                         child: Text(
-                          'Support',
+                          FFLocalizations.of(context).getText(
+                            'e3tjyvz3' /* Support */,
+                          ),
                           style:
                               FlutterFlowTheme.of(context).labelLarge.override(
                                     fontFamily: 'Plus Jakarta Sans',
@@ -389,7 +413,9 @@ class _ProfileWidgetState extends State<ProfileWidget>
                         padding:
                             EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 0.0, 0.0),
                         child: Text(
-                          'Terms of Service',
+                          FFLocalizations.of(context).getText(
+                            '50hdk5e6' /* Terms of Service */,
+                          ),
                           style:
                               FlutterFlowTheme.of(context).labelLarge.override(
                                     fontFamily: 'Plus Jakarta Sans',
@@ -424,9 +450,11 @@ class _ProfileWidgetState extends State<ProfileWidget>
                     await authManager.signOut();
                     GoRouter.of(context).clearRedirectLocation();
 
-                    context.goNamedAuth('authentication', context.mounted);
+                    context.goNamedAuth('List03UserSelect', context.mounted);
                   },
-                  text: 'Log Out',
+                  text: FFLocalizations.of(context).getText(
+                    '2guyzhkk' /* Log Out */,
+                  ),
                   options: FFButtonOptions(
                     width: 150.0,
                     height: 44.0,

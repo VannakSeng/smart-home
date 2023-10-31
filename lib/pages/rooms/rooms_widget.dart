@@ -1,4 +1,5 @@
 import '/auth/firebase_auth/auth_util.dart';
+import '/backend/api_requests/api_calls.dart';
 import '/backend/backend.dart';
 import '/components/room_item_widget/room_item_widget_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -6,6 +7,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'rooms_model.dart';
@@ -38,6 +40,15 @@ class _RoomsWidgetState extends State<RoomsWidget> {
 
   @override
   Widget build(BuildContext context) {
+    if (isiOS) {
+      SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(
+          statusBarBrightness: Theme.of(context).brightness,
+          systemStatusBarContrastEnforced: true,
+        ),
+      );
+    }
+
     context.watch<FFAppState>();
 
     return GestureDetector(
@@ -53,13 +64,13 @@ class _RoomsWidgetState extends State<RoomsWidget> {
               var roomsRecordReference = RoomsRecord.collection.doc();
               await roomsRecordReference.set(createRoomsRecordData(
                 name: 'test-1',
-                active: false,
+                active: true,
                 userId: currentUserReference,
               ));
               _model.newRoom = RoomsRecord.getDocumentFromData(
                   createRoomsRecordData(
                     name: 'test-1',
-                    active: false,
+                    active: true,
                     userId: currentUserReference,
                   ),
                   roomsRecordReference);
@@ -116,7 +127,9 @@ class _RoomsWidgetState extends State<RoomsWidget> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            'Smart Home',
+                            FFLocalizations.of(context).getText(
+                              'lx4n0a2s' /* Smart Home */,
+                            ),
                             style: FlutterFlowTheme.of(context).displaySmall,
                           ),
                           AuthUserStreamWidget(
@@ -138,17 +151,12 @@ class _RoomsWidgetState extends State<RoomsWidget> {
                     ),
                   ),
                   Expanded(
-                    child: FutureBuilder<List<RoomsRecord>>(
-                      future: queryRoomsRecordOnce(
-                        queryBuilder: (roomsRecord) => roomsRecord
-                            .where(
-                              'active',
-                              isEqualTo: true,
-                            )
-                            .where(
-                              'user_id',
-                              isEqualTo: currentUserReference,
-                            ),
+                    child: StreamBuilder<List<RoomsRecord>>(
+                      stream: queryRoomsRecord(
+                        queryBuilder: (roomsRecord) => roomsRecord.where(
+                          'user_id',
+                          isEqualTo: currentUserReference,
+                        ),
                       ),
                       builder: (context, snapshot) {
                         // Customize what your widget looks like when it's loading.
@@ -174,10 +182,31 @@ class _RoomsWidgetState extends State<RoomsWidget> {
                           itemBuilder: (context, listViewIndex) {
                             final listViewRoomsRecord =
                                 listViewRoomsRecordList[listViewIndex];
-                            return RoomItemWidgetWidget(
-                              key: Key(
-                                  'Key6oe_${listViewIndex}_of_${listViewRoomsRecordList.length}'),
-                              data: listViewRoomsRecord,
+                            return FutureBuilder<ApiCallResponse>(
+                              future: RoomGroup.getAllCall.call(),
+                              builder: (context, snapshot) {
+                                // Customize what your widget looks like when it's loading.
+                                if (!snapshot.hasData) {
+                                  return Center(
+                                    child: SizedBox(
+                                      width: 50.0,
+                                      height: 50.0,
+                                      child: CircularProgressIndicator(
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                          FlutterFlowTheme.of(context).primary,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }
+                                final roomItemGetAllResponse = snapshot.data!;
+                                return RoomItemWidgetWidget(
+                                  key: Key(
+                                      'Key6oe_${listViewIndex}_of_${listViewRoomsRecordList.length}'),
+                                  data: listViewRoomsRecord,
+                                );
+                              },
                             );
                           },
                         );

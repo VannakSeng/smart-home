@@ -11,6 +11,7 @@ import '/flutter_flow/upload_data.dart';
 import 'package:aligned_dialog/aligned_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'room_model.dart';
@@ -48,6 +49,15 @@ class _RoomWidgetState extends State<RoomWidget> {
 
   @override
   Widget build(BuildContext context) {
+    if (isiOS) {
+      SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(
+          statusBarBrightness: Theme.of(context).brightness,
+          systemStatusBarContrastEnforced: true,
+        ),
+      );
+    }
+
     context.watch<FFAppState>();
 
     return GestureDetector(
@@ -159,6 +169,8 @@ class _RoomWidgetState extends State<RoomWidget> {
                               if (confirmDialogResponse) {
                                 await widget.room!.reference.delete();
                                 context.safePop();
+                              } else {
+                                return;
                               }
                             },
                           ),

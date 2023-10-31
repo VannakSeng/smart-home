@@ -9,6 +9,7 @@ import '/flutter_flow/upload_data.dart';
 import 'device_widget.dart' show DeviceWidget;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -16,6 +17,8 @@ class DeviceModel extends FlutterFlowModel<DeviceWidget> {
   ///  Local state fields for this page.
 
   String photo = 'false';
+
+  DevicesRecord? data;
 
   ///  State fields for stateful widgets in this page.
 
@@ -26,6 +29,7 @@ class DeviceModel extends FlutterFlowModel<DeviceWidget> {
   String uploadedFileUrl = '';
 
   // State field(s) for TextFieldDeviceName widget.
+  FocusNode? textFieldDeviceNameFocusNode;
   TextEditingController? textFieldDeviceNameController;
   String? Function(BuildContext, String?)?
       textFieldDeviceNameControllerValidator;
@@ -40,6 +44,7 @@ class DeviceModel extends FlutterFlowModel<DeviceWidget> {
 
   void dispose() {
     unfocusNode.dispose();
+    textFieldDeviceNameFocusNode?.dispose();
     textFieldDeviceNameController?.dispose();
   }
 

@@ -3,6 +3,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -36,6 +37,15 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
 
   @override
   Widget build(BuildContext context) {
+    if (isiOS) {
+      SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(
+          statusBarBrightness: Theme.of(context).brightness,
+          systemStatusBarContrastEnforced: true,
+        ),
+      );
+    }
+
     context.watch<FFAppState>();
 
     return GestureDetector(
@@ -86,7 +96,9 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
                         padding: EdgeInsetsDirectional.fromSTEB(
                             24.0, 64.0, 24.0, 24.0),
                         child: Text(
-                          'Smart Home',
+                          FFLocalizations.of(context).getText(
+                            '47be4bmj' /* Smart Home */,
+                          ),
                           textAlign: TextAlign.center,
                           style: FlutterFlowTheme.of(context)
                               .displayMedium
@@ -119,9 +131,12 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
                               return;
                             }
 
-                            context.goNamedAuth('rooms', context.mounted);
+                            context.goNamedAuth(
+                                'List03UserSelect', context.mounted);
                           },
-                          text: 'Join with Google',
+                          text: FFLocalizations.of(context).getText(
+                            'ir0ga2wl' /* Join with Google */,
+                          ),
                           icon: FaIcon(
                             FontAwesomeIcons.google,
                             color: Color(0xFF101213),
@@ -167,9 +182,12 @@ class _AuthenticationWidgetState extends State<AuthenticationWidget> {
                                     return;
                                   }
 
-                                  context.goNamedAuth('rooms', context.mounted);
+                                  context.goNamedAuth(
+                                      'List03UserSelect', context.mounted);
                                 },
-                                text: 'Join with Apple',
+                                text: FFLocalizations.of(context).getText(
+                                  'yulivqp9' /* Join with Apple */,
+                                ),
                                 icon: Icon(
                                   Icons.apple,
                                   color: Color(0xFF101213),

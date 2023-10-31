@@ -5,8 +5,9 @@ import 'package:go_router/go_router.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import '/backend/backend.dart';
+import '/backend/schema/structs/index.dart';
 
-import '../../auth/base_auth_user_provider.dart';
+import '/auth/base_auth_user_provider.dart';
 
 import '/index.dart';
 import '/main.dart';
@@ -78,15 +79,16 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       initialLocation: '/',
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
-      errorBuilder: (context, state) =>
-          appStateNotifier.loggedIn ? RoomsWidget() : AuthenticationWidget(),
+      errorBuilder: (context, state) => appStateNotifier.loggedIn
+          ? List03UserSelectWidget()
+          : List03UserSelectWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
           builder: (context, _) => appStateNotifier.loggedIn
-              ? RoomsWidget()
-              : AuthenticationWidget(),
+              ? List03UserSelectWidget()
+              : List03UserSelectWidget(),
         ),
         FFRoute(
           name: 'room',
@@ -127,6 +129,21 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => DeviceWidget(
             room: params.getParam('room', ParamType.Document),
           ),
+        ),
+        FFRoute(
+          name: 'List03UserSelect',
+          path: '/list03UserSelect',
+          builder: (context, params) => List03UserSelectWidget(),
+        ),
+        FFRoute(
+          name: 'InsertItem',
+          path: '/insertItem',
+          builder: (context, params) => InsertItemWidget(),
+        ),
+        FFRoute(
+          name: 'SelectedItem',
+          path: '/selectedItem',
+          builder: (context, params) => SelectedItemWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
@@ -293,7 +310,7 @@ class FFRoute {
 
           if (requireAuth && !appStateNotifier.loggedIn) {
             appStateNotifier.setRedirectLocationIfUnset(state.location);
-            return '/authentication';
+            return '/list03UserSelect';
           }
           return null;
         },

@@ -3,6 +3,7 @@ import '/components/device_item_widget/device_item_widget_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'room_item_widget_model.dart';
@@ -58,10 +59,7 @@ class _RoomItemWidgetWidgetState extends State<RoomItemWidgetWidget> {
               Align(
                 alignment: AlignmentDirectional(-1.00, 0.00),
                 child: Text(
-                  valueOrDefault<String>(
-                    widget.data?.name,
-                    '-',
-                  ),
+                  widget.data!.name,
                   style: FlutterFlowTheme.of(context).titleMedium,
                 ),
               ),
@@ -87,7 +85,9 @@ class _RoomItemWidgetWidgetState extends State<RoomItemWidgetWidget> {
                     );
                   },
                   child: Text(
-                    'more',
+                    FFLocalizations.of(context).getText(
+                      '9jqf3z2p' /* more */,
+                    ),
                     style: FlutterFlowTheme.of(context).bodyLarge.override(
                           fontFamily: 'Readex Pro',
                           color: FlutterFlowTheme.of(context).tertiary,
